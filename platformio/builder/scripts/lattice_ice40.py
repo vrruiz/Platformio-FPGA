@@ -3,7 +3,8 @@
     latticeice40-builder.py
 """
 import os
-from os.path import join
+from os.path import join, dirname
+from distutils.spawn import find_executable
 from SCons.Script import (AlwaysBuild, Builder, DefaultEnvironment,
                           Environment, Default, Glob)
 
@@ -14,6 +15,10 @@ env.Append(SIMULNAME="simulation")
 # -- Get the local folder in which the icestorm tools should be installed
 piopackages_dir = env.subst('$PIOPACKAGES_DIR')
 bin_dir = join(piopackages_dir, 'toolchain-icestorm', 'bin')
+# Find executable, if already installed
+executable = find_executable('iceprog')
+if (executable):
+    bin_dir = dirname(executable)
 
 # -- Add this path to the PATH env variable. First the building tools will be
 # -- searched in the local PATH. If they are not founde, the global ones will
